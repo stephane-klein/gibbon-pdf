@@ -2,6 +2,8 @@
 
 Project status: [POC](https://en.wikipedia.org/wiki/Proof_of_concept)
 
+Screencast: https://www.youtube.com/watch?v=Ojscu83sB_w
+
 Roadmaps:
 
 - [x] Integrate [`mozilla-services/react-jsonschema-form`](https://github.com/mozilla-services/react-jsonschema-form)
