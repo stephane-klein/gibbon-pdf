@@ -1,0 +1,25 @@
+{
+    "type": "object",
+    "properties": {
+        "invoice_id": {
+            "type": "integer",
+            "default": "1"
+        },
+        "created": {
+            "type": "string",
+            "default": "2018-01-01"
+        },
+        "due": {
+            "type": "string",
+            "default": "2018-01-01"
+        },
+        "from": {
+            "type": "string",
+            "default": "foo"
+        },
+        "to": {
+            "type": "string",
+            "default": "bar"
+        }
+    }
+}

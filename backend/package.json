@@ -1,0 +1,51 @@
+{
+  "name": "poc-jsonschema-form-mjml-template-server-backend",
+  "version": "1.0.0",
+  "private": true,
+  "main": "server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "watch": "nodemon  src/server.js",
+    "lint": "eslint --ignore-path .gitignore .",
+    "pretest": "eslint --ignore-path .gitignore .",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harobed/poc-jsonschema-form-mjml-template-server.git"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "keywords": [
+    "pdf",
+    "puppeteer",
+    "template",
+    "nunjucks",
+    "jsonschema"
+  ],
+  "author": "Stéphane Klein",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/harobed/poc-jsonschema-form-mjml-template-server/issues"
+  },
+  "homepage": "https://github.com/harobed/poc-jsonschema-form-mjml-template-server#readme",
+  "dependencies": {
+    "@koa/cors": "2.2.3",
+    "koa": "2.7.0",
+    "puppeteer": "chrome-73",
+    "koa-bodyparser": "4.2.1",
+    "koa-router": "7.4.0",
+    "koa-static": "5.0.0",
+    "nunjucks": "3.2.0"
+  },
+  "devDependencies": {
+    "eslint": "5.16.0",
+    "eslint-plugin-jest": "22.14.1",
+    "jest": "24.8.0",
+    "nodemon": "1.19.1",
+    "semistandard": "13.0.1",
+    "superagent-binary-parser": "1.0.1",
+    "supertest": "4.0.2"
+  }
+}
