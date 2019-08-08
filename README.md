@@ -16,7 +16,8 @@ Screencast: https://www.youtube.com/watch?v=2M10x76f6c8
 - [x] Integrate [`puppeteer`](https://github.com/GoogleChrome/puppeteer/)
 - [x] Docker Image (`harobed/poc-generate-pdf-with-html-template-and-jsonschema:latest`)
 - [x] curl example
-- [ ] Screencast
+- [x] Screencast
+- [ ] Add S3 upload option
 - [ ] Add [UISchema](https://react-jsonschema-form.readthedocs.io/en/latest/) support
 - [ ] Check json input with JSON Schema
 - [ ] Test frontend
