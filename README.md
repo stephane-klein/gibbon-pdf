@@ -4,7 +4,13 @@ Project status: [POC](https://en.wikipedia.org/wiki/Proof_of_concept)
 
 Screencast: https://www.youtube.com/watch?v=2M10x76f6c8
 
-Roadmaps:
+## Why this project?
+
+- I would like to move PDF generation from my application in a separate service
+- I would like to allow humans to generate PDF manually, via a simple application plugged to the same API.
+- I would like to keep a history (optionally) of all document generated
+
+## Roadmaps
 
 - [x] Integrate [`mozilla-services/react-jsonschema-form`](https://github.com/mozilla-services/react-jsonschema-form)
 - [x] Integrate [`puppeteer`](https://github.com/GoogleChrome/puppeteer/)
@@ -18,7 +24,7 @@ Roadmaps:
 - [ ] Swagger
 - [ ] Add option to save generated pdf (in PostgreSQL)
 
-Features:
+## Features
 
 - Generate PDF file from:
   - HTML template
@@ -29,7 +35,7 @@ Features:
   - User can preview the document or generate the PDF
 - Optionnaly record all PDF generation
 
-This project is based on this stack:
+## This project is based on this stack
 
 - [Backend](backend/):
   - [NodeJS](https://nodejs.org/en/) with [Koa](https://koajs.com/)
@@ -43,6 +49,7 @@ This project is based on this stack:
   - [Jest](https://jestjs.io/) and [supertest](https://github.com/visionmedia/supertest) for backend tests
   - [ESLint](https://eslint.org/)
 
+---
 
 Invoice examples:
 
