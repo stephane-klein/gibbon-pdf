@@ -1,5 +1,5 @@
 {
-  "name": "poc-jsonschema-form-mjml-template-server-frontend",
+  "name": "gibbon-pdf-frontend",
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
@@ -21,7 +21,6 @@
     "build": "react-scripts build",
     "lint": "eslint --ignore-path .gitignore .",
     "pretest": "eslint --ignore-path .gitignore .",
-    "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "browserslist": {

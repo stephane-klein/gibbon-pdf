@@ -1,5 +1,5 @@
 {
-  "name": "poc-jsonschema-form-mjml-template-server-backend",
+  "name": "gibbon-pdf-backend",
   "version": "1.0.0",
   "private": true,
   "main": "server.js",
@@ -9,10 +9,6 @@
     "lint": "eslint --ignore-path .gitignore .",
     "pretest": "eslint --ignore-path .gitignore .",
     "test": "jest"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/harobed/poc-jsonschema-form-mjml-template-server.git"
   },
   "jest": {
     "testEnvironment": "node"
@@ -26,10 +22,6 @@
   ],
   "author": "Stéphane Klein",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/harobed/poc-jsonschema-form-mjml-template-server/issues"
-  },
-  "homepage": "https://github.com/harobed/poc-jsonschema-form-mjml-template-server#readme",
   "dependencies": {
     "@koa/cors": "2.2.3",
     "koa": "2.7.0",
@@ -44,7 +36,6 @@
     "eslint-plugin-jest": "22.14.1",
     "jest": "24.8.0",
     "nodemon": "1.19.1",
-    "semistandard": "13.0.1",
     "superagent-binary-parser": "1.0.1",
     "supertest": "4.0.2"
   }

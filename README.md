@@ -1,4 +1,6 @@
-# Generate PDF with Template and JSON Schema
+# Gibbon-pdf
+
+Generate PDF with Template and JSON Schema.
 
 Project status: [POC](https://en.wikipedia.org/wiki/Proof_of_concept)
 
@@ -49,6 +51,17 @@ Screencast: https://www.youtube.com/watch?v=2M10x76f6c8
 - Tooling
   - [Jest](https://jestjs.io/) and [supertest](https://github.com/visionmedia/supertest) for backend tests
   - [ESLint](https://eslint.org/)
+
+## FAQ
+
+### How can I enable Authentication system?
+
+This project hasn't build-in authentication system, it's a internal service in your stack,
+you must protect it by a private network or [Basic access authentication](https://en.wikipedia.org/wiki/Basic_access_authentication) system.
+
+### Why « Gibbon-pdf » name?
+
+[Gibbon](https://en.wikipedia.org/wiki/Gibbon) as an allusion to [Mandrill App](https://mandrill.com/).
 
 ---
 
