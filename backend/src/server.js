@@ -1,15 +1,14 @@
 const createApp = require('./app');
-
-const PORT = process.env.PORT || 5000;
+const config = require('./config');
 
 const app = createApp(
-    PORT,
-    process.env.TEMPLATES_PATH || '../pdf-templates/',
-    process.env.STATIC_PATH || undefined,
+    config.get('port'),
+    config.get('template_path'),
+    config.get('static_path')
 );
 
-const server = app.listen(PORT, () => {
-    console.log(`Server listening on port: ${PORT}`);
+const server = app.listen(config.get('port'), () => {
+    console.log(`Server listening on port: ${config.get('port')}`);
 });
 
 module.exports = server;

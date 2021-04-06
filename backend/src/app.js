@@ -12,6 +12,8 @@ const nunjucks = require('nunjucks');
 const puppeteer = require('puppeteer');
 
 const readFile = promisify(fs.readFile);
+
+const config = require('./config');
 const router = new Router();
 
 router.get('/v1/', (ctx) => {
@@ -21,12 +23,12 @@ router.get('/v1/', (ctx) => {
 });
 
 router.get('/v1/templates/', (ctx) => {
-    ctx.body = fs.readdirSync(ctx.templatePath);
+    ctx.body = fs.readdirSync(config.get('template_path'));
 });
 
 router.get('/v1/templates/:name', (ctx) => {
     const schemaJsonPath = path.join(
-        ctx.templatePath,
+        config.get('template_path'),
         ctx.params.name,
         'schema.json'
     );
@@ -58,7 +60,7 @@ router.get('/v1/templates/:name', (ctx) => {
 
 router.post('/v1/templates/:name/html', (ctx) => {
     const templatePath = path.join(
-        ctx.templatePath,
+        config.get('template_path'),
         ctx.params.name,
         'default.html'
     );
@@ -107,19 +109,17 @@ app.use(bodyParser());
 app.use(cors());
 app.use(router.routes());
 
-module.exports = function createApp(port, templatePath, staticPath, chromiumPath) {
+module.exports = function createApp() {
     const app = new Koa();
-    app.context.port = port;
-    app.context.templatePath = templatePath;
     app.use(bodyParser());
     app.use(cors());
     app.use(router.routes());
 
-    if (staticPath) {
-        app.use(koaStatic(staticPath));
+    if (config.get('static_path')) {
+        app.use(koaStatic(config.get('static_path')));
         app.use(async (ctx, next) => {
             ctx.type = 'html';
-            ctx.body = await readFile(`${staticPath}/index.html`);
+            ctx.body = await readFile(`${config.get('static_path')}/index.html`);
             await next();
         });
     }
