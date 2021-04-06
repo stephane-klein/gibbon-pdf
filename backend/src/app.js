@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { promisify } = require('util');
 
 const Koa = require('koa');
 const koaStatic = require('koa-static');
@@ -10,6 +11,7 @@ const bodyParser = require('koa-bodyparser');
 const nunjucks = require('nunjucks');
 const puppeteer = require('puppeteer');
 
+const readFile = promisify(fs.readFile);
 const router = new Router();
 
 router.get('/v1/', (ctx) => {
@@ -120,6 +122,11 @@ module.exports = function createApp(port, templatePath, staticPath, chromiumPath
 
     if (staticPath) {
         app.use(koaStatic(staticPath));
+        app.use(async (ctx, next) => {
+            ctx.type = 'html';
+            ctx.body = await readFile(`${staticPath}/index.html`);
+            await next();
+        });
     }
     
     return app;
