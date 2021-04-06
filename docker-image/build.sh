@@ -1,13 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-cd $(dirname "$0")
-
-(
-    cd ../frontend
-    unset REACT_APP_API_URL
-    yarn run build
-)
+cd "$(dirname "$0")"
 
 (
     cd ..

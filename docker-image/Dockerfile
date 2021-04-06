@@ -1,5 +1,15 @@
 FROM node:14.16.0-alpine3.13
 
+RUN mkdir -p /src/
+
+COPY frontend/ /src/frontend/
+WORKDIR /src/frontend/
+
+RUN yarn install
+RUN yarn run build
+
+FROM node:14.16.0-alpine3.13
+
 RUN apk add --no-cache \
     chromium \
     nss \
@@ -26,7 +36,7 @@ RUN addgroup -S pptruser && adduser -S -g pptruser pptruser \
 RUN mkdir -p /src/
 WORKDIR /src/
 
-COPY frontend/build/ /src/frontend/
+COPY --from=0 /src/frontend/build/ /src/frontend/
 COPY backend/package.json /src/
 COPY backend/yarn.lock /src/
 COPY pdf-templates/ /templates/
@@ -36,11 +46,11 @@ RUN yarn install
 COPY backend/src/ /src/src/
 
 ENV PORT=5000
-EXPOSE 5000
-
 ENV TEMPLATES_PATH=/templates/
 ENV STATIC_PATH=/src/frontend/
 ENV CHROMIUM_PATH=/usr/bin/chromium-browser
+
+EXPOSE 5000
 
 RUN chown pptruser /src/ -R
 
