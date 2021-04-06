@@ -27,6 +27,7 @@ WORKDIR /src/
 COPY frontend/build/ /src/frontend/
 COPY backend/package.json /src/
 COPY backend/yarn.lock /src/
+COPY pdf-templates/ /templates/
 
 RUN yarn install
 
