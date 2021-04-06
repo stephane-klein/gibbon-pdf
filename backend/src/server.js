@@ -6,7 +6,6 @@ const app = createApp(
     PORT,
     process.env.TEMPLATES_PATH || '../pdf-templates/',
     process.env.STATIC_PATH || undefined,
-    process.env.CHROMIUM_PATH || undefined
 );
 
 const server = app.listen(PORT, () => {

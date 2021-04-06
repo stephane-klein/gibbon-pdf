@@ -84,10 +84,6 @@ router.post('/v1/templates/:name/pdf', async (ctx) => {
         args: ['--disable-dev-shm-usage']
     };
 
-    if (ctx.chromiumPath) {
-        puppeteerConfig.executablePath = ctx.chromiumPath;
-    }
-
     const browser = await puppeteer.launch(puppeteerConfig);
     const page = await browser.newPage();
     await page.setRequestInterception(true);
@@ -115,7 +111,6 @@ module.exports = function createApp(port, templatePath, staticPath, chromiumPath
     const app = new Koa();
     app.context.port = port;
     app.context.templatePath = templatePath;
-    app.context.chromiumPath = chromiumPath;
     app.use(bodyParser());
     app.use(cors());
     app.use(router.routes());
