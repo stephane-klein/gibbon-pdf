@@ -82,7 +82,7 @@ router.post('/v1/templates/:name/html', (ctx) => {
 
 router.post('/v1/templates/:name/pdf', async (ctx) => {
     const puppeteerConfig = {
-        args: ['--disable-dev-shm-usage']
+        args: ['--no-sandbox', '--disable-dev-shm-usage']
     };
 
     const browser = await puppeteer.launch(puppeteerConfig);

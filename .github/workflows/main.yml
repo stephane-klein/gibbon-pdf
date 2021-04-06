@@ -1,0 +1,78 @@
+name: CI
+
+on: [push, workflow_dispatch]
+
+jobs:
+  lint-backend:
+    runs-on: ubuntu-latest
+    container: node:14.16.0-alpine3.13
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v2
+      - name: Install dependencies and lint javascript
+        run: |
+          cd backend
+          yarn install --frozen-lockfile
+          yarn lint
+  lint-frontend:
+    runs-on: ubuntu-latest
+    container: node:14.16.0-alpine3.13
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v2
+      - name: Install dependencies and lint javascript
+        run: |
+          cd frontend
+          yarn install --frozen-lockfile
+          yarn lint
+
+  test-backend:
+    needs: [lint-backend]
+    runs-on: ubuntu-latest
+    container: node:14.16.0-alpine3.13
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v2
+      - name: Install dependencies and test backend
+        env:
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+          PUPPETEER_EXECUTABLE_PATH: "/usr/bin/chromium-browser"
+        run: |
+          apk add --no-cache \
+            chromium \
+            nss \
+            freetype \
+            freetype-dev \
+            harfbuzz \
+            ca-certificates \
+            ttf-freefont
+          rm -rf /var/cache/*
+          mkdir /var/cache/apk
+          cd backend
+          yarn install --frozen-lockfile
+          yarn test
+
+  build-and-push-docker-image:
+    needs: [lint-backend, lint-frontend, test-backend]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v2
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.SPACEFILL_DOCKER_REGISTRY_USERNAME }}
+          password: ${{ secrets.SPACEFILL_DOCKER_REGISTRY_PASSWORD }}
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          push: ${{ github.ref == 'refs/heads/master' }}
+          tags: spacefill/gibbon-pdf:latest
+          file: docker-image/Dockerfile
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
