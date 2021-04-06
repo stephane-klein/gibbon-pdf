@@ -26,9 +26,9 @@ WORKDIR /src/
 
 COPY frontend/build/ /src/frontend/
 COPY backend/package.json /src/
-COPY backend/package-lock.json /src/
+COPY backend/yarn.lock /src/
 
-RUN npm install
+RUN yarn install
 
 COPY backend/src/ /src/src/
 
@@ -43,4 +43,4 @@ RUN chown pptruser /src/ -R
 
 USER pptruser
 
-CMD npm run start
+CMD yarn run start

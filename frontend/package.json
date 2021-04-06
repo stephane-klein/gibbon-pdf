@@ -8,11 +8,11 @@
     "eslint": "5.16.0",
     "eslint-plugin-react": "7.14.3",
     "react": "16.8.6",
-    "react-bootstrap": "^0.32.4",
+    "react-bootstrap": "0.32.4",
     "react-dom": "16.8.6",
     "react-jsonschema-form": "1.7.0",
     "react-router": "5.0.1",
-    "react-router-breadcrumbs-hoc": "^3.2.2",
+    "react-router-breadcrumbs-hoc": "3.2.2",
     "react-router-dom": "5.0.1",
     "react-scripts": "3.0.1"
   },

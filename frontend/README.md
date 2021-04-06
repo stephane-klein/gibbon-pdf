@@ -1,12 +1,12 @@
 ```
 $ export REACT_APP_API_URL=http://127.0.0.1:5000
-$ npm run start
+$ yarn run start
 ```
 
 ```
-$ npm run lint
+$ yarn run lint
 ```
 
 ```
-$ npm run build
+$ yarn run build
 ```

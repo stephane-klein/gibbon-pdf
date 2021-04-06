@@ -6,7 +6,7 @@ cd $(dirname "$0")
 (
     cd ../frontend
     unset REACT_APP_API_URL
-    npm run build
+    yarn run build
 )
 
 (

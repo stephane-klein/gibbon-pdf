@@ -1,11 +1,11 @@
 ```
-$ npm install
+$ yarn install
 ```
 
 ```
-$ npm run test
+$ yarn run test
 ```
 
 ```
-$ npm run watch
+$ yarn run watch
 ```
