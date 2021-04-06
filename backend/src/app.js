@@ -80,7 +80,6 @@ router.post('/v1/templates/:name/html', (ctx) => {
     );
 });
 
-
 router.post('/v1/templates/:name/pdf', async (ctx) => {
     const puppeteerConfig = {
         args: ['--disable-dev-shm-usage']
@@ -97,7 +96,7 @@ router.post('/v1/templates/:name/pdf', async (ctx) => {
         };
         interceptedRequest.continue(data);
     });
-    await page.goto(`http://${ctx.request.header.host}/v1/templates/${ctx.params.name}/html`);
+    await page.goto(`${config.get('site_url')}/v1/templates/${ctx.params.name}/html`);
     const buffer = await page.pdf({ format: 'A4' });
     ctx.type = 'application/pdf';
     ctx.body = buffer;

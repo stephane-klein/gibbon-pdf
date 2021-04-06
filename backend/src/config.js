@@ -18,7 +18,14 @@ const config = Convict({
         format: String,
         default: undefined,
         env: 'STATIC_PATH'
+    },
+    site_url: {
+        doc: 'The url where is exposed gibbon-pdf backend',
+        format: String,
+        default: 'http://127.0.0.1:${PORT}',
+        env: 'SITE_URL'
     }
+
 });
 
 config.validate({ allowed: 'strict' });

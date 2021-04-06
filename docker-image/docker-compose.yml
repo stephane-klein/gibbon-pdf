@@ -1,10 +1,12 @@
 version: "3.7"
 services:
   app:
-     image: harobed/poc-generate-pdf-with-html-template-and-jsonschema:latest
-     cap_add:
+    image: harobed/poc-generate-pdf-with-html-template-and-jsonschema:latest
+    cap_add:
       - SYS_ADMIN
-     ports:
+    ports:
       - 5000:5000
-     volumes:
+    environment:
+      - SITE_URL=http://localhost:5000
+    volumes:
       - ../pdf-templates/:/templates/
