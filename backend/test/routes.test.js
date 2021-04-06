@@ -9,7 +9,6 @@ const createApp = require('../src/app');
 
 config.set('port', 5001);
 config.set('template_path', path.join(__dirname, 'fixtures'));
-config.set('site_url', 'http://127.0.0.1:5001');
 
 const app = createApp();
 

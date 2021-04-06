@@ -6,7 +6,5 @@ services:
       - SYS_ADMIN
     ports:
       - 5000:5000
-    environment:
-      - SITE_URL=http://localhost:5000
     volumes:
       - ../pdf-templates/:/templates/
