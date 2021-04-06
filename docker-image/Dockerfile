@@ -1,7 +1,7 @@
-FROM node:11.14.0-alpine
+FROM node:14.16.0-alpine3.13
 
-RUN echo @edge http://nl.alpinelinux.org/alpine/v3.10/community >> /etc/apk/repositories \
-    && echo @edge http://nl.alpinelinux.org/alpine/v3.10/main >> /etc/apk/repositories \
+RUN echo @edge http://nl.alpinelinux.org/alpine/v3.13/community >> /etc/apk/repositories \
+    && echo @edge http://nl.alpinelinux.org/alpine/v3.13/main >> /etc/apk/repositories \
     && apk add --no-cache \
     chromium@edge \
     harfbuzz@edge \

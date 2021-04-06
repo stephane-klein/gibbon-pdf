@@ -6,6 +6,11 @@ Project status: [POC](https://en.wikipedia.org/wiki/Proof_of_concept)
 
 Screencast: https://www.youtube.com/watch?v=2M10x76f6c8
 
+## Requirement:
+
+- [nodejs](https://nodejs.org) `14.16.X`
+- [Docker](https://www.docker.com/)
+
 ## Why this project?
 
 - I would like to move PDF generation from my application in a separate service
