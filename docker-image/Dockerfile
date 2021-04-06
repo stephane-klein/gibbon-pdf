@@ -1,17 +1,19 @@
 FROM node:14.16.0-alpine3.13
 
-RUN echo @edge http://nl.alpinelinux.org/alpine/v3.13/community >> /etc/apk/repositories \
-    && echo @edge http://nl.alpinelinux.org/alpine/v3.13/main >> /etc/apk/repositories \
-    && apk add --no-cache \
-    chromium@edge \
-    harfbuzz@edge \
-    nss@edge \
-    freetype@edge \
-    ttf-freefont@edge \
+RUN apk add --no-cache \
+    chromium \
+    nss \
+    freetype \
+    freetype-dev \
+    harfbuzz \
+    ca-certificates \
+    ttf-freefont \
     && rm -rf /var/cache/* \
     && mkdir /var/cache/apk
 
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+# Tell Puppeteer to skip installing Chrome. We'll be using the installed package.
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
+    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 
 # Add user so we don't need --no-sandbox.
 RUN addgroup -S pptruser && adduser -S -g pptruser pptruser \
