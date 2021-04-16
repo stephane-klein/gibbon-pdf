@@ -97,7 +97,10 @@ router.post('/v1/templates/:name/pdf', async (ctx) => {
         interceptedRequest.continue(data);
     });
     await page.goto(`http://127.0.0.1:${config.get('port')}/v1/templates/${ctx.params.name}/html`);
-    const buffer = await page.pdf({ format: 'A4' });
+    const buffer = await page.pdf({
+        format: 'A4',
+        printBackground: true
+    });
     ctx.type = 'application/pdf';
     ctx.body = buffer;
     browser.close();
