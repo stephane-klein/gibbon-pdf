@@ -1,6 +1,9 @@
 import axios from 'axios';
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import useAxios from 'axios-hooks';
+import React, { useState, useCallback, useRef } from 'react';
+import { defaultTo, get } from 'lodash';
 
+const GetByPathWithDefault = (data, path, defaultValue) => defaultTo(get(data, path), defaultValue);
 import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom';
 import {
     Button, ButtonToolbar,
@@ -54,20 +57,23 @@ function App() {
 }
 
 function Home() {
-    const [templates, setTemplates] = useState([]);
+    const [
+        {
+            data: data,
+            error: error
+        }
+    ] = useAxios(
+        `${apiURL}/v1/templates/`
+    );
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const result = await axios(`${apiURL}/v1/templates/`);
-            setTemplates(result.data);
-        };
-
-        fetchData();
-    }, []);
+    if (error) {
+        console.error(error);
+        return <p>Error</p>;
+    }
 
     return (
         <ListGroup>
-            {templates.map(item => (
+            {(data || []).map(item => (
                 <ListGroupItem key={item}><NavLink to={`/${item}/`}>{item}</NavLink></ListGroupItem>
             ))}
         </ListGroup>
@@ -75,18 +81,17 @@ function Home() {
 }
 
 function RessourceForm({ match }) {
-    const [jsonSchema, setJsonSchema] = useState(null);
     const [fieldValues, setFieldValues] = useState({});
     const formEl = useRef(null);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const result = await axios(`${apiURL}/v1/templates/${match.params.id}`);
-            setJsonSchema(result.data.json_schema);
-        };
-
-        fetchData();
-    }, [match.params.id]);
+    const [
+        {
+            data: dataTemplate,
+            loading: loading,
+            error: error
+        }
+    ] = useAxios(
+        `${apiURL}/v1/templates/${match.params.id}`
+    );
 
     const submitPreview = useCallback(
         () => {
@@ -116,7 +121,11 @@ function RessourceForm({ match }) {
         []
     );
 
-    if (jsonSchema === null) return <p>Loading</p>;
+    if (loading) return <p>Loading</p>;
+    if (error) {
+        console.error(error);
+        return <p>Error</p>;
+    }
 
     return (
         <div>
@@ -126,7 +135,7 @@ function RessourceForm({ match }) {
                 <Card.Header>Form</Card.Header>
                 <Card.Body>
                     <Form
-                        schema={jsonSchema}
+                        schema={GetByPathWithDefault(dataTemplate, 'json_schema')}
                         formData={fieldValues}
                         ref={formEl}
                     >
@@ -159,27 +168,33 @@ function RessourceForm({ match }) {
 }
 
 function Preview({ resourceId, values }) {
-    const [previewResult, setPreviewResult] = useState(null);
+    const [
+        {
+            data,
+            error
+        }
+    ] = useAxios(
+        {
+            url: `${apiURL}/v1/templates/${resourceId}/html`,
+            method: 'POST',
+            data: values
+        }
+    );
+
     const iframeRef = useCallback(node => {
         if (node !== null) {
             setTimeout(() => {
-                node.contentDocument.body.innerHTML = previewResult;
+                node.contentDocument.body.innerHTML = data;
             }, 100);
         }
-    }, [previewResult]);
+    }, [data]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const result = await axios.post(
-                `${apiURL}/v1/templates/${resourceId}/html`,
-                values
-            );
-            setPreviewResult(result.data);
-        };
-        fetchData();
-    }, [resourceId, values]);
 
-    if (previewResult === null) return <p>Loading...</p>;
+    
+    if (error) {
+        console.error(error);
+        return <p>Error</p>;
+    }
 
     return (
         <div>
