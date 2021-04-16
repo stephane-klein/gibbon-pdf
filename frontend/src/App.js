@@ -4,13 +4,13 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom';
 import {
     Button, ButtonToolbar,
-    Grid, Row, Col,
+    Container, Row, Col,
     Breadcrumb, BreadcrumbItem,
     ListGroup, ListGroupItem,
-    Panel
+    Card
 } from 'react-bootstrap';
 
-import Form from 'react-jsonschema-form';
+import Form from '@rjsf/bootstrap-4';
 import withBreadcrumbs from 'react-router-breadcrumbs-hoc';
 
 const apiURL = process.env.REACT_APP_API_URL || `${window.location.href.split('/')[0]}//${window.location.href.split('/')[2]}`;
@@ -39,7 +39,7 @@ function App() {
     return (
         <Router>
             <div className='App'>
-                <Grid>
+                <Container>
                     <Row>
                         <Col>
                             <Breadcrumbs />
@@ -47,7 +47,7 @@ function App() {
                     </Row>
                     <Route exact path='/' component={Home} />
                     <Route exact path='/:id' component={RessourceForm} />
-                </Grid>
+                </Container>
             </div>
         </Router>
     );
@@ -120,33 +120,40 @@ function RessourceForm({ match }) {
 
     return (
         <div>
-            <Panel>
-                <Panel.Heading>Form</Panel.Heading>
-                <Panel.Body>
+            <Card
+                className='mt-3'
+            >
+                <Card.Header>Form</Card.Header>
+                <Card.Body>
                     <Form
                         schema={jsonSchema}
                         formData={fieldValues}
                         ref={formEl}
                     >
-                        <ButtonToolbar className='btn-toolbar pull-right'>
+                        <ButtonToolbar
+                            className='justify-content-end'
+                        >
                             <Button
-                                bsStyle='primary'
+                                variant="success"
+                                className='mr-2'
                                 onClick={submitPreview}>Preview</Button>
                             <Button
                                 onClick={submitPdf}>Download PDF</Button>
                         </ButtonToolbar>
                     </Form>
-                </Panel.Body>
-            </Panel>
-            <Panel>
-                <Panel.Heading>HTML Preview</Panel.Heading>
-                <Panel.Body>
+                </Card.Body>
+            </Card>
+            <Card
+                className='mt-3'
+            >
+                <Card.Header>HTML Preview</Card.Header>
+                <Card.Body>
                     <Preview
                         resourceId={match.params.id}
                         values={fieldValues}
                     />
-                </Panel.Body>
-            </Panel>
+                </Card.Body>
+            </Card>
         </div>
     );
 }
