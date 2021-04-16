@@ -1,5 +1,7 @@
 # Gibbon-pdf
 
+Docker image: https://hub.docker.com/r/spacefill/gibbon-mail
+
 Generate PDF with Template and JSON Schema.
 
 Project status: [POC](https://en.wikipedia.org/wiki/Proof_of_concept)
@@ -28,9 +30,20 @@ Screencast: https://www.youtube.com/watch?v=2M10x76f6c8
 - [ ] Add [UISchema](https://react-jsonschema-form.readthedocs.io/en/latest/) support
 - [ ] Check json input with JSON Schema
 - [ ] Test frontend
-- [ ] Configure CI
+- [X] Configure CI
 - [ ] Swagger
 - [ ] Add option to save generated pdf (in PostgreSQL)
+
+## Docker Image
+
+[`spacefill/gibbon-pdf`](https://hub.docker.com/r/spacefill/gibbon-pdf) Docker
+Image is automatically builded with with our CI. We currently maintain several versions
+as we use [`semver`](https://semver.org/) to tag our docker images
+
+- `latest` tag is pushed with the last commit on `master`
+- `vX.X.X` tag are pushed when we push a new tag
+
+To see how to create a new tag see ["How to publish a new version"](/README.md#how-to-publish-a-new-version)
 
 ## Features
 
