@@ -89,6 +89,64 @@ describe('Route /v1/templates/:name/html', () => {
                 );
             });
     });
+    it('return english html content with lang body params', async () => {
+        return request(server)
+            .post('/v1/templates/invoice/html')
+            .send({
+                invoice_id: '123',
+                lang: 'EN'
+            })
+            .expect('Content-Type', /html/)
+            .expect(200)
+            .then(response => {
+                expect(response.text).toContain(
+                    'Invoice #: 123'
+                );
+            });
+    });
+    it('return french html content lang body params', async () => {
+        return request(server)
+            .post('/v1/templates/invoice/html')
+            .send({
+                invoice_id: '123',
+                lang: 'FR'
+            })
+            .expect('Content-Type', /html/)
+            .expect(200)
+            .then(response => {
+                expect(response.text).toContain(
+                    'Méthode de paiement'
+                );
+            });
+    });
+    it('return english html content with lang query params', async () => {
+        return request(server)
+            .post('/v1/templates/invoice/html?lang=EN')
+            .send({
+                invoice_id: '123'
+            })
+            .expect('Content-Type', /html/)
+            .expect(200)
+            .then(response => {
+                expect(response.text).toContain(
+                    'Invoice #: 123'
+                );
+            });
+    });
+    it('return french html content lang query params', async () => {
+        return request(server)
+            .post('/v1/templates/invoice/html?lang=FR')
+            .send({
+                invoice_id: '123'
+            })
+            .expect('Content-Type', /html/)
+            .expect(200)
+            .then(response => {
+                expect(response.text).toContain(
+                    'Méthode de paiement'
+                );
+            });
+    });
 });
 
 describe('Route /v1/templates/:name/pdf', () => {
@@ -113,13 +171,32 @@ describe('Route /v1/templates/:name/pdf', () => {
                     ).toString()
                         .replace(/^\/CreationDate.*$/gm, '/CreationDate (D:20190808090336+00\'00\')')
                         .replace(/^\/ModDate.*$/gm, '/ModDate (D:20190808090336+00\'00\')>>')
-                ).toEqual(
+                ).toMatchSnapshot();
+            });
+    });
+    it('Return french pdf binary', async () => {
+        return request(server)
+            .post('/v1/templates/invoice/pdf')
+            .send({
+                invoice_id: '123',
+                lang: 'FR'
+            })
+            .parse(binaryParser)
+            .buffer()
+            .expect(200)
+            .expect('Content-Type', 'application/pdf')
+            .then(response => {
+                fs.writeFileSync(
+                    path.join(__dirname, 'output', 'invoice.pdf'),
+                    response.body
+                );
+                expect(
                     fs.readFileSync(
-                        path.join(__dirname, 'output', 'invoice.orig.pdf')
+                        path.join(__dirname, 'output', 'invoice.pdf')
                     ).toString()
                         .replace(/^\/CreationDate.*$/gm, '/CreationDate (D:20190808090336+00\'00\')')
                         .replace(/^\/ModDate.*$/gm, '/ModDate (D:20190808090336+00\'00\')>>')
-                );
+                ).toMatchSnapshot();
             });
     });
 });

@@ -62,11 +62,11 @@ router.post('/v1/templates/:name/html', (ctx) => {
     const templatePath = path.join(
         config.get('template_path'),
         ctx.params.name,
-        'default.html'
+        `${ctx.request.body.lang || ctx.request.query.lang || 'default'}.html`
     );
     if (!fs.existsSync(templatePath)) {
         ctx.status = 404;
-        ctx.body = `Template ${ctx.params.name}/default.html not exists`;
+        ctx.body = `Template ${ctx.params.name}/${ctx.request.body.lang || ctx.request.query.lang || 'default'}.html not exists`;
         return;
     }
     ctx.body = nunjucks.renderString(
@@ -96,7 +96,11 @@ router.post('/v1/templates/:name/pdf', async (ctx) => {
         };
         interceptedRequest.continue(data);
     });
-    await page.goto(`http://127.0.0.1:${config.get('port')}/v1/templates/${ctx.params.name}/html`);
+    await page.goto(
+        ctx.request.body.lang
+            ? `http://127.0.0.1:${config.get('port')}/v1/templates/${ctx.params.name}/html?lang=${ctx.request.body.lang}`
+            : `http://127.0.0.1:${config.get('port')}/v1/templates/${ctx.params.name}/html`
+    );
     const buffer = await page.pdf({
         format: 'A4',
         printBackground: true

@@ -56,6 +56,32 @@ To see how to create a new tag see ["How to publish a new version"](/README.md#h
   - User can preview the document or generate the PDF
 - Optionnaly record all PDF generation
 
+### How does the multi-language support works?
+
+Inside your pdf templates folders, you can create multiple languages files for the same pdf, in the following format: `{lang}.html`.
+
+You also need to let a default file in case the language is not found or no language is requested.
+
+So, for example, your folder should look something like this:
+
+```
+$ ls pdf-templates/pdf-example
+default.html                         de.html              fr.html                                  es.html      
+```
+
+Then, you can add the `lang` property to the body or query params of your request, which will send the pdf with the requested language if it exists.
+
+For example, the following body will try to send a german pdf:
+
+```
+{
+    ...,
+    "lang": "de"
+}
+```
+
+If the `lang` property is not present in the body of your request, the default pdf will be sent.
+
 ## This project is based on this stack
 
 - [Backend](backend/):
