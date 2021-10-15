@@ -8,13 +8,28 @@ const cors = require('@koa/cors');
 const Router = require('koa-router');
 const bodyParser = require('koa-bodyparser');
 
+const Sentry = require('@sentry/node');
 const nunjucks = require('nunjucks');
 const puppeteer = require('puppeteer');
 
 const readFile = promisify(fs.readFile);
 
 const config = require('./config');
+const { overrideConsoleErrorToAddSentryCapture } = require('./utils');
 const router = new Router();
+
+if (config.get('sentryDSN')) {
+    console.log('Sentry enabled');
+    Sentry.init({
+        dsn: config.get('sentryDSN'),
+        release: config.get('sentryRelease'),
+        attachStacktrace: true,
+        normalizeDepth: 11,
+        environment: config.get('sentryEnvironment')
+    });
+
+    overrideConsoleErrorToAddSentryCapture();
+} 
 
 router.get('/v1/', (ctx) => {
     ctx.body = {
@@ -48,9 +63,15 @@ router.get('/v1/templates/:name', (ctx) => {
 
     try {
         jsonSchema = JSON.parse(jsonSchemaStr);
-    } catch (e) {
+    } catch (error) {
+        Sentry.withScope((scope) => {
+            scope.addEventProcessor(function (event) {
+                return Sentry.Handlers.parseRequest(event, ctx.request);
+            });
+            console.error(error);
+        });
         ctx.status = 500;
-        ctx.body = e;
+        ctx.body = error;
         return;
     }
     ctx.body = {
@@ -69,15 +90,25 @@ router.post('/v1/templates/:name/html', (ctx) => {
         ctx.body = `Template ${ctx.params.name}/${ctx.request.body.lang || ctx.request.query.lang || 'default'}.html not exists`;
         return;
     }
-    ctx.body = nunjucks.renderString(
-        fs.readFileSync(
-            templatePath,
-            {
-                encoding: 'utf8'
-            }
-        ),
-        ctx.request.body
-    );
+
+    try {      
+        ctx.body = nunjucks.renderString(
+            fs.readFileSync(
+                templatePath,
+                {
+                    encoding: 'utf8'
+                }
+            ),
+            ctx.request.body
+        );
+    } catch (error) {
+        Sentry.withScope((scope) => {
+            scope.addEventProcessor(function (event) {
+                return Sentry.Handlers.parseRequest(event, ctx.request);
+            });
+            console.error(error);
+        });
+    }
 });
 
 router.post('/v1/templates/:name/pdf', async (ctx) => {
@@ -85,29 +116,38 @@ router.post('/v1/templates/:name/pdf', async (ctx) => {
         args: ['--no-sandbox', '--disable-dev-shm-usage']
     };
 
-    const browser = await puppeteer.launch(puppeteerConfig);
-    const page = await browser.newPage();
-    await page.setRequestInterception(true);
-    page.on('request', interceptedRequest => {
-        var data = {
-            'method': 'POST',
-            'postData': JSON.stringify(ctx.request.body),
-            headers: { 'Content-Type': 'application/json' }
-        };
-        interceptedRequest.continue(data);
-    });
-    await page.goto(
-        ctx.request.body.lang
-            ? `http://127.0.0.1:${config.get('port')}/v1/templates/${ctx.params.name}/html?lang=${ctx.request.body.lang}`
-            : `http://127.0.0.1:${config.get('port')}/v1/templates/${ctx.params.name}/html`
-    );
-    const buffer = await page.pdf({
-        format: 'A4',
-        printBackground: true
-    });
-    ctx.type = 'application/pdf';
-    ctx.body = buffer;
-    browser.close();
+    try {      
+        const browser = await puppeteer.launch(puppeteerConfig);
+        const page = await browser.newPage();
+        await page.setRequestInterception(true);
+        page.on('request', interceptedRequest => {
+            var data = {
+                'method': 'POST',
+                'postData': JSON.stringify(ctx.request.body),
+                headers: { 'Content-Type': 'application/json' }
+            };
+            interceptedRequest.continue(data);
+        });
+        await page.goto(
+            ctx.request.body.lang
+                ? `http://127.0.0.1:${config.get('port')}/v1/templates/${ctx.params.name}/html?lang=${ctx.request.body.lang}`
+                : `http://127.0.0.1:${config.get('port')}/v1/templates/${ctx.params.name}/html`
+        );
+        const buffer = await page.pdf({
+            format: 'A4',
+            printBackground: true
+        });
+        ctx.type = 'application/pdf';
+        ctx.body = buffer;
+        browser.close();
+    } catch (error) {
+        Sentry.withScope((scope) => {
+            scope.addEventProcessor(function (event) {
+                return Sentry.Handlers.parseRequest(event, ctx.request);
+            });
+            console.error(error);
+        });
+    }
 });
 
 const app = new Koa();

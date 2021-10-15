@@ -18,6 +18,24 @@ const config = Convict({
         format: String,
         default: undefined,
         env: 'STATIC_PATH'
+    },
+    sentryDSN: {
+        doc: 'Sentry DSN URL',
+        format: String,
+        default: '',
+        env: 'SENTRY_DSN'
+    },
+    sentryEnvironment: {
+        doc: 'Sentry environment name',
+        format: String,
+        default: 'unknown',
+        env: 'SENTRY_ENVIRONMENT'
+    },
+    sentryRelease: {
+        doc: 'Sentry release',
+        format: String,
+        default: '',
+        env: 'SENTRY_RELEASE'
     }
 });
 

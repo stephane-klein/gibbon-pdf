@@ -22,3 +22,11 @@ For now tests must be run inside a docker container with image
 ```
 $ ./scripts/test.sh
 ```
+
+## Sentry
+
+You can setup Sentry on `gibbon-pdf`, you must pass environment variable:
+
+- `SENTRY_DSN`
+- `SENTRY_ENVIRONMENT`
+- `SENTRY_RELEASE`
