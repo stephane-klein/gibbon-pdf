@@ -11,5 +11,5 @@ docker run \
     -v "${PWD}/test:/src/test/" \
     -v "${PWD}/package.json:/src/package.json" \
     -v "${PWD}/yarn.lock:/src/yarn.lock" \
-    node:14.16.0-alpine3.13 \
-    sh -c "apk add --no-cache chromium nss freetype freetype-dev harfbuzz ca-certificates ttf-freefont && cd /src/ && yarn && yarn run test"
+    node:14.19.1-alpine3.15 \
+    sh -c "apk add --no-cache chromium nss freetype harfbuzz ca-certificates ttf-freefont && cd /src/ && yarn && yarn run test"

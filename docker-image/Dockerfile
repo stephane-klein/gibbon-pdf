@@ -1,4 +1,4 @@
-FROM node:14.16.0-alpine3.13
+FROM node:14.19.1-alpine3.15
 
 RUN mkdir -p /src/
 
@@ -8,13 +8,12 @@ WORKDIR /src/frontend/
 RUN yarn install
 RUN yarn run build
 
-FROM node:14.16.0-alpine3.13
+FROM node:14.19.1-alpine3.15
 
 RUN apk add --no-cache \
     chromium \
     nss \
     freetype \
-    freetype-dev \
     harfbuzz \
     ca-certificates \
     ttf-freefont \
